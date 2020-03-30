@@ -13,7 +13,7 @@ file(GLOB SOURCE_LIST CONFIGURE_DEPENDS
         "${NaiveBayes_SOURCE_DIR}/src/*.cpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(bayes ${SOURCE_LIST} ${HEADER_LIST})
+add_library(bayes ${SOURCE_LIST} ${HEADER_LIST} trainer.cc ../include/bayes/trainer.h)
 
 # We need this directory, and users of our library will need it too
 target_include_directories(bayes PUBLIC ../include)
