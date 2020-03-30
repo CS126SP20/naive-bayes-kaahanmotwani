@@ -8,7 +8,7 @@
 
 void Trainer::parse_stream(ifstream& training_images_stream,
                            ifstream& training_labels_stream) {
-  int kNumDigits = 10;
+  const int kNumDigits = 10;
   vector<vector<vector<double>>> pixel_probabilities;
 
   // populates array with 0
@@ -27,9 +27,9 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   string label_line;
   string image_line;
 
-  int kImageSize = 28;
+  const int kImageSize = 28;
 
-  int count_of_shaded_pixels[28][28][10] = {{{0}}};
+  double count_of_shaded_pixels[kImageSize][kImageSize][kNumDigits] = {{{0}}};
 
   //cout << count_of_shaded_pixels[20][6][8] << endl;
   int digit;
@@ -48,22 +48,34 @@ void Trainer::parse_stream(ifstream& training_images_stream,
 
         if (image_line[i] == '+' || image_line[i] == '#') {
           count_of_shaded_pixels[count][i][digit]++;
-          //cout << "shaded" << endl;
 
         }
       }
       count++;
     }
   }
-  
+
   double priors[kNumDigits];
 
 
   for (size_t i = 0; i < kNumDigits; i++) {
     priors[i] = (occurrences[i] / 5000.0);
   }
-  cout << priors[2];
+  cout << priors[2] << endl;
 
+  //CalculateProbabilities(count_of_shaded_pixels, priors);
+
+  cout << count_of_shaded_pixels[16][8][2] << endl;
+
+  for (size_t x = 0; x < kImageSize; x++) {
+    for (size_t y = 0; y < kImageSize; y++) {
+      for (size_t i = 0; i < kNumDigits; i++) {
+        count_of_shaded_pixels[x][y][i] = count_of_shaded_pixels[x][y][i] / occurrences[i];
+      }
+    }
+  }
+
+  cout << count_of_shaded_pixels[16][8][2] << endl;
 
 }
 
@@ -86,6 +98,11 @@ void Trainer::PixelProbability(const int& digit,
 }
 
 double Trainer::CalculatePriors(ifstream& training_labels_stream, int index) {
+
+
+}
+
+void Trainer::CalculateProbabilities(int count_of_shaded_pixels[28][28][10], int priors[10]) {
 
 
 }

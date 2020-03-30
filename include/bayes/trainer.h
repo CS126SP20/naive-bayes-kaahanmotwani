@@ -26,6 +26,7 @@ class Trainer {
   private:
    static void PixelProbability(const int& digit, ifstream& training_images_stream);
    static double CalculatePriors(ifstream& training_labels_stream, int index);
+   static void CalculateProbabilities(int count_of_shaded_pixels[28][28][10], int priors[10]);
 };
 
 #endif  // NAIVEBAYES_TRAINER_H
