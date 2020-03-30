@@ -3,6 +3,7 @@
 #include <bayes/classifier.h>
 #include <bayes/image.h>
 #include <bayes/model.h>
+#include <bayes/trainer.h>
 #include <gflags/gflags.h>
 
 #include <cstdlib>
@@ -37,10 +38,10 @@ int main(int argc, char** argv) {
   ifstream training_images_stream(FLAGS_images);
   ifstream training_labels_stream(FLAGS_labels);
 
-  std::istream& input_stream = training_images_stream;
-  std::string tag;// Represents the first line in the spf file as a string
-  input_stream >> tag;// Puts the contents of the first line into tag
-  cout << tag;
+  Trainer trainer;
+  trainer.parse_stream(training_images_stream, training_labels_stream);
+
+
 
 
 //  if (FLAGS_name.empty()) {
