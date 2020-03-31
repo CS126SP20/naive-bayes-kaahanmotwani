@@ -5,7 +5,8 @@
 #include <bayes/model.h>
 
 namespace bayes {
-  int count = 0;
+  double count = 0;
+  double num_correct = 0;
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream, vector< vector< vector<double> > >&
   pixel_probabilities, vector<double> priors) {
 
@@ -79,6 +80,8 @@ namespace bayes {
       }
     }
 
+    double percentage = (num_correct / count);
+    cout << percentage << endl;
 
   }
 
@@ -97,10 +100,11 @@ namespace bayes {
 
 
     if (classified == test_labels[count]) {
+      num_correct++;
       cout << "correct" << endl;
     }
 
-    
+
 //    string label_line;
 //    int value;
 //    int count_of_while_loop = 0;
