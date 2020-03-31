@@ -35,8 +35,6 @@ class Trainer {
     static void AddProbabilitiesToFile(vector< vector< vector<double> > >&
         pixel_probabilities, vector<int>& occurrences);
 
-    static double CalculatePriors(ifstream& training_labels_stream, int index);
-
     /**
     *
     * @param training_images_stream

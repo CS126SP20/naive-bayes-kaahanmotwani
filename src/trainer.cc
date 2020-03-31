@@ -9,24 +9,11 @@
 void Trainer::parse_stream(ifstream& training_images_stream,
                            ifstream& training_labels_stream) {
 
-  vector<vector<vector<double>>> pixel_probabilities(28,
-      vector<vector<double>>(28,vector<double>(10,0)));
-
+  vector<vector<vector<double>>> pixel_probabilities(kImageSize,
+      vector<vector<double>>(kImageSize,vector<double>(kNumDigits,0)));
 
   // populates vector with 0s
   vector<int> occurrences(kNumDigits, 0);
-
-//  int occurrences[kNumDigits];
-//  for (int& occurrence : occurrences) {
-//    occurrence = 0;
-//  }
-
-
-
-
-
-
-
 
   CalculateProbabilities(training_images_stream, training_labels_stream,
       pixel_probabilities, occurrences);
@@ -38,9 +25,6 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   std::ifstream test_labels_stream("data/testlabels");
 
   bayes::ReadModelData(test_images_stream, test_labels_stream);
-
-
-  // cout << probabilities[0] << endl;
 
 }
 
@@ -78,11 +62,6 @@ void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
 
 }
 
-double Trainer::CalculatePriors(ifstream& training_labels_stream, int index) {
-
-
-}
-
 void Trainer::CalculateProbabilities(ifstream& training_images_stream,
                                      ifstream& training_labels_stream,
                                      vector< vector< vector<double> > >&
@@ -93,21 +72,18 @@ void Trainer::CalculateProbabilities(ifstream& training_images_stream,
   int digit;
 
   while (std::getline(training_labels_stream, label_line)) {
-    // Populates occurrences with how many times digits occur in training labels
     digit = std::stoi(label_line);
+    // Populates occurrences with how many times digits occur in training labels
     occurrences[digit]++;
 
     int row = 0;
-
     // getting each line in the image that has 28 rows (lines)
     while (row < kImageSize && std::getline(training_images_stream, image_line)) {
-
       for (size_t col = 0; col < kImageSize; col++) {
+
         // getting each character (column) in the row (line)
         if (image_line[col] == '+' || image_line[col] == '#') {
           pixel_probabilities[row][col][digit]++;
-          //count_of_shaded_pixels[row][col][digit]++;
-
         }
       }
       // to move on to the next line in the image
