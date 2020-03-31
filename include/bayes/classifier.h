@@ -8,6 +8,7 @@
 #include <nlohmann/json.hpp>
 
 using std::ifstream;
+using std::istream;
 using std::string;
 using std::vector;
 using std::cout;
@@ -17,7 +18,14 @@ namespace bayes {
   const int kNumDigits = 10;
   const int kImageSize = 28;
 
-  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream);
+  /**
+   *
+   * @param test_images_stream
+   * @param test_labels_stream
+   */
+  void ValidateClassification(ifstream& test_images_stream,
+      ifstream& test_labels_stream);
+
   /**
    *
    * @param posterior_probabilities
@@ -33,11 +41,14 @@ namespace bayes {
    */
   vector<double> AddLabelsToAVector(ifstream& test_labels_stream);
 
-
+  /**
+   *
+   */
   void IterateThroughImages(ifstream& test_images_stream,
-      vector<double> posterior_probabilities,
       vector< vector< vector<double>>>& csv_probabilities,
       vector<double>& priors, vector<double>& test_labels);
+  vector< vector< vector<double>>> ReadModelData(istream& input_stream);
+  vector<double> ReadPriorsFromModel(istream& input_stream);
 
 }  // namespace bayes
 
