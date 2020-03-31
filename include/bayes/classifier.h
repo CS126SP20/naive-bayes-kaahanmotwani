@@ -23,8 +23,11 @@ namespace bayes {
    * @param posterior_probabilities
    * @param test_labels
    */
-  void classify(vector<double>& posterior_probabilities, vector<double>& test_labels);
+  void ClassifyAnImage(vector<double>& posterior_probabilities, vector<double>& test_labels);
   vector<double> AddLabelsToAVector(ifstream& test_labels_stream);
+  void classify(ifstream& test_images_stream, vector<double> posterior_probabilities,
+    vector< vector< vector<double> > >& pixel_probabilities,
+    vector<double> priors, vector<double> test_labels);
 
 }  // namespace bayes
 
