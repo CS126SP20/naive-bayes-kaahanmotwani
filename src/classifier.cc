@@ -12,22 +12,12 @@ namespace bayes {
     std::istream& input_stream = model_data;
     std::string line;
 
-    // These nested while loops will find out the pixels that are shaded
-    // in the test images in order to classify them
-    double count_of_shaded_pixels[kImageSize][kImageSize][kNumDigits] = {{{0}}};
     string label_line;
     string image_line;
-    //int digit;
-    bool shaded;
+
 
     // will be used to store posterior probabilities for each class for a single image
     vector<double> posterior_probabilities(kNumDigits, 1);
-
-    //while (std::getline(test_labels_stream, label_line)) {
-
-      // Populates occurrences with how many times digits occur in training labels
-      //digit = std::stoi(label_line);
-      //occurrences[digit]++;
 
 
 
@@ -42,13 +32,12 @@ namespace bayes {
         for (size_t digit = 0; digit < kNumDigits; digit++) {
           // getting each character (column) in the row (line)
           if (image_line[col] == '+' || image_line[col] == '#') {
-            shaded = true;
+
             posterior_probabilities[digit] += log10(pixel_probabilities[row][col][digit]);
             // If it's shaded, get the probability at that pixel for each class, and then take the log of it
             // count_of_shaded_pixels[row][col][digit]++;
 
           } else {
-            shaded = false;
             posterior_probabilities[digit] += log10(1 - pixel_probabilities[row][col][digit]);
             // if the space is empty, check for the inverse
           }
@@ -56,37 +45,29 @@ namespace bayes {
       }
       // to move on to the next line in the image
       row++;
-    }
 
-    std::cout << posterior_probabilities[1] << std::endl;
-    std::cout << posterior_probabilities[2] << std::endl;
-    std::cout << posterior_probabilities[3] << std::endl;
-    std::cout << posterior_probabilities[4] << std::endl;
-    std::cout << posterior_probabilities[5] << std::endl;
-    std::cout << posterior_probabilities[6] << std::endl;
-    std::cout << posterior_probabilities[7] << std::endl;
-    std::cout << posterior_probabilities[8] << std::endl;
-    std::cout << posterior_probabilities[9] << std::endl;
-    std::cout << posterior_probabilities[0] << std::endl;
-    //}
-
-
-    double class_probabilities[kNumDigits];
-    while (std::getline(model_data, line)) {
-
-      std::vector<std::string> results;
-
-      // This set of nested for loops correctly calculates
-      for (size_t i = 0; i < kNumDigits; i++) {
-        class_probabilities[i] = 0;
-        for (size_t x = 0; x < kImageSize; x++) {
-          for (size_t y = 0; y < kImageSize; y++) {
-            class_probabilities[i] += log10(count_of_shaded_pixels[x][y][i]);
-          }
-        }
-        //class_probabilities[i] += log10(priors[i]);
+      if (row == 27) {
+        classify(posterior_probabilities);
       }
     }
+
+
+
+
+
+  }
+
+  void classify(vector<double>& posterior_probabilities) {
+    vector<double> classified_images;
+    double classified = 0;
+    for (size_t i = 0; i < kNumDigits; i++) {
+      if (posterior_probabilities[i] > posterior_probabilities[classified]) {
+        classified = i;
+      }
+    }
+
+    classified_images.push_back(classified);
+    cout << classified_images[0] << endl;
 
   }
 }  // namespace bayes

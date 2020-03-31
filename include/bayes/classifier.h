@@ -18,6 +18,7 @@ namespace bayes {
   const int kImageSize = 28;
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
                      vector< vector< vector<double> > >& pixel_probabilities, vector<double> priors);
+  void classify(vector<double>& posterior_probabilities);
 }  // namespace bayes
 
 #endif  // BAYES_CLASSIFIER_H_
