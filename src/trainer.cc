@@ -63,7 +63,7 @@ void Trainer::CalculateProbabilities(ifstream& training_images_stream,
 }
 
 void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
-    pixel_probabilities, vector<int>& occurrences, vector<double> priors) {
+    pixel_probabilities, vector<int>& occurrences, vector<double>& priors) {
 
   std::ofstream file("data/model_probabilities.csv");
 

@@ -16,7 +16,6 @@ namespace bayes {
     while (std::getline(test_labels_stream, label_line2)) {
       value = std::stoi(label_line2);
       test_labels.push_back(value);
-
     }
     cout << test_labels[0] << endl;
     cout << test_labels[1] << endl;
@@ -50,9 +49,12 @@ namespace bayes {
       for (size_t col = 0; col < kImageSize; col++) {
 
         for (size_t digit = 0; digit < kNumDigits; digit++) {
+          if (row == 0 && col == 0) {
+            posterior_probabilities[digit] += log10(priors[digit]);
+            
+          }
           // getting each character (column) in the row (line)
           if (image_line[col] == '+' || image_line[col] == '#') {
-
             posterior_probabilities[digit] += log10(pixel_probabilities[row][col][digit]);
             // If it's shaded, get the probability at that pixel for each class, and then take the log of it
             // count_of_shaded_pixels[row][col][digit]++;
@@ -68,7 +70,7 @@ namespace bayes {
       // to move on to the next line in the image
       row++;
 
-
+      // If I have reached the end of an image, then reset posterior probabilities (should be 10 for each image)
       if (row == 28) {
 
 

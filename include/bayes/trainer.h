@@ -38,7 +38,7 @@ class Trainer {
     * @param occurrences
      */
     static void AddProbabilitiesToFile(vector< vector< vector<double> > >&
-        pixel_probabilities, vector<int>& occurrences, vector<double> priors);
+        pixel_probabilities, vector<int>& occurrences, vector<double>& priors);
 
     /**
     *
