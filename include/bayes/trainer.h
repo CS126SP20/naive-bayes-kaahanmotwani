@@ -54,7 +54,7 @@ class Trainer {
                                       vector<int>& occurrences);
     static constexpr int kNumDigits = 10;
     static constexpr int kImageSize = 28;
-    static constexpr double k = 1;
+    static constexpr double k = .1;
     static constexpr double v = 2;
 };
 

@@ -18,7 +18,13 @@ namespace bayes {
   const int kImageSize = 28;
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
                      vector< vector< vector<double> > >& pixel_probabilities, vector<double> priors);
+  /**
+   *
+   * @param posterior_probabilities
+   * @param test_labels
+   */
   void classify(vector<double>& posterior_probabilities, vector<double>& test_labels);
+  vector<double> AddLabelsToAVector(ifstream& test_labels_stream);
 
 }  // namespace bayes
 
