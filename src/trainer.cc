@@ -77,6 +77,10 @@ void Trainer::parse_stream(ifstream& training_images_stream,
     }
   }
 
+  std::ofstream file("data/model_probabilities.csv");
+  file << "Hello, world" << endl;
+  file.close();
+
   // correctly prints out Laplace smoothed probability
   // cout << count_of_shaded_pixels[16][8][2] << endl;
 
@@ -93,7 +97,6 @@ void Trainer::parse_stream(ifstream& training_images_stream,
     probabilities[i] += priors[i];
   }
 
-  //cout << count_of_shaded_pixels[1][0][2] << endl;
 
   cout << probabilities[0] << endl;
 
