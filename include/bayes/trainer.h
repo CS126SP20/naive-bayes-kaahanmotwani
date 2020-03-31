@@ -5,6 +5,7 @@
 #ifndef NAIVEBAYES_TRAINER_H
 #define NAIVEBAYES_TRAINER_H
 
+#include <bayes/classifier.h>
 #include <string>
 #include <cstdlib>
 #include <fstream>

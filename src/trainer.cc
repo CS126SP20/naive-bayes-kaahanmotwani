@@ -74,7 +74,7 @@ void Trainer::parse_stream(ifstream& training_images_stream,
       }
       file << endl;
     }
-
+    file << endl;
   }
 
 
@@ -90,20 +90,9 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   file.close();
 
   // correctly prints out Laplace smoothed probability
-  cout << count_of_shaded_pixels[18][9][2] << endl;
+  //cout << count_of_shaded_pixels[18][9][2] << endl;
 
-  double probabilities[kNumDigits];
-
-  // This set of nested for loops correctly calculates
-  for (size_t i = 0; i < kNumDigits; i++) {
-    probabilities[i] = 1;
-    for (size_t x = 0; x < kImageSize; x++) {
-      for (size_t y = 0; y < kImageSize; y++) {
-        probabilities[i] += log10(count_of_shaded_pixels[x][y][i]);
-      }
-    }
-    probabilities[i] += priors[i];
-  }
+  bayes::ReadModelData();
 
 
   // cout << probabilities[0] << endl;

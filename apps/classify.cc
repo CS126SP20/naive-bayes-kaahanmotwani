@@ -11,8 +11,6 @@
 #include <iostream>
 #include <string>
 
-// TODO(you): Change the code below for your project use case.
-
 DEFINE_string(images, "", "The training images");
 DEFINE_string(labels, "", "The training labels");
 
