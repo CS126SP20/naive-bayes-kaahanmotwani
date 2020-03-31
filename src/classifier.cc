@@ -9,10 +9,13 @@ namespace bayes {
 
   void ValidateClassification(ifstream& test_images_stream,
       ifstream& test_labels_stream) {
-
+    // Uses an ifstream to get model file, and then places it into an istream
     std::ifstream model_data("data/model_probabilities");
     std::istream& input_stream = model_data;
-    vector< vector< vector<double>>> image_probabilities = ReadModelData(input_stream);
+    // Gets the probabilities of each image and priors from the model using
+    // helper functions
+    vector< vector< vector<double>>> image_probabilities =
+        ReadModelData(input_stream);
     vector<double> priors = ReadPriorsFromModel(input_stream);
 
     vector<double> test_labels;
@@ -21,20 +24,17 @@ namespace bayes {
     IterateThroughImages(test_images_stream,
         image_probabilities, priors, test_labels);
 
-    double percentage = (num_correct / count);
-    cout << percentage * 100;
+    double percentage_correct = (num_correct / count);
+    cout << percentage_correct * 100;
     cout << "% of the images were correctly classified!" << endl;
   }
 
   vector< vector< vector<double>>> ReadModelData(istream& input_stream) {
-//    std::ifstream model_data("data/model_probabilities");
-//    std::istream& input_stream = model_data;
-
-
+    //
     vector< vector< vector<double>>> image_probabilities(kImageSize,
         vector<vector<double>>(kImageSize,
             vector<double>(kNumDigits,0)));
-
+    //
     for (size_t i = 0; i < kNumDigits; i++) {
       for (size_t row = 0; row < kImageSize; row++) {
         for (size_t col = 0; col < kImageSize; col++) {
@@ -42,24 +42,25 @@ namespace bayes {
         }
       }
     }
+
     return image_probabilities;
-
-
   }
 
   vector<double> ReadPriorsFromModel(istream& input_stream) {
     vector<double> priors(kNumDigits, 0);
+    // C
     for (size_t i = 0; i < kNumDigits; i++) {
       double d;
       input_stream >> d;
       priors[i] = d;
     }
+
     return priors;
   }
 
   void IterateThroughImages(ifstream& test_images_stream,
-      vector< vector< vector<double>>>& image_probabilities,
-      vector<double>& priors, vector<double>& test_labels) {
+      const vector< vector< vector<double>>>& image_probabilities,
+      const vector<double>& priors, const vector<double>& test_labels) {
 
     // will be used to store posterior probabilities for each
     // class for a single image
@@ -70,6 +71,7 @@ namespace bayes {
     // getting each line in the image that has 28 rows (lines)
     while (std::getline(test_images_stream, image_line)) {
       cout << image_line << endl;
+
       for (size_t col = 0; col < kImageSize; col++) {
         for (size_t digit = 0; digit < kNumDigits; digit++) {
           // The if statement below adds the priors to the posterior
@@ -93,9 +95,9 @@ namespace bayes {
           }
         }
       }
+
       // to move on to the next line in the image
       row++;
-
       // If I have reached the end of an image, then reset
       // the posterior probabilities (should be 10 of them per image)
       if (row == 28) {
@@ -110,7 +112,7 @@ namespace bayes {
   }
 
   void ClassifyAnImage(vector<double>& posterior_probabilities,
-      vector<double>& test_labels) {
+      const vector<double>& test_labels) {
     double classified = 0;
     for (size_t i = 0; i < kNumDigits; i++) {
       if (posterior_probabilities[i] > posterior_probabilities[classified]) {

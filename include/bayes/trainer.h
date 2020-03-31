@@ -21,6 +21,7 @@ using std::vector;
 
 class Trainer {
   public:
+
     /**
      *
      * @param training_images_stream
@@ -29,8 +30,11 @@ class Trainer {
     static void parse_stream(ifstream& training_images_stream,
         ifstream& training_labels_stream);
 
-
   private:
+    static constexpr int kNumDigits = 10;
+    static constexpr int kImageSize = 28;
+    static constexpr double k = .1;
+    static constexpr double v = 2;
 
     /**
     *
@@ -38,7 +42,8 @@ class Trainer {
     * @param occurrences
      */
     static void AddProbabilitiesToFile(vector< vector< vector<double> > >&
-        pixel_probabilities, vector<int>& occurrences, vector<double>& priors);
+        pixel_probabilities, const vector<int>& occurrences,
+        vector<double>& priors);
 
     /**
     *
@@ -52,10 +57,6 @@ class Trainer {
                                       vector< vector< vector<double> > >&
                                           pixel_probabilities,
                                       vector<int>& occurrences);
-    static constexpr int kNumDigits = 10;
-    static constexpr int kImageSize = 28;
-    static constexpr double k = .1;
-    static constexpr double v = 2;
 };
 
 #endif  // NAIVEBAYES_TRAINER_H
