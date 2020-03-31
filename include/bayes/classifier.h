@@ -18,13 +18,15 @@ namespace bayes {
   const int kImageSize = 28;
 
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
-                     vector< vector< vector<double> > >& pixel_probabilities, vector<double> priors);
+                     vector< vector< vector<double> > >& pixel_probabilities,
+                     vector<double> priors);
   /**
    *
    * @param posterior_probabilities
    * @param test_labels
    */
-  void ClassifyAnImage(vector<double>& posterior_probabilities, vector<double>& test_labels);
+  void ClassifyAnImage(vector<double>& posterior_probabilities,
+      vector<double>& test_labels);
 
   /**
    *
@@ -34,9 +36,10 @@ namespace bayes {
   vector<double> AddLabelsToAVector(ifstream& test_labels_stream);
 
 
-  void IterateThroughImages(ifstream& test_images_stream, vector<double> posterior_probabilities,
-    vector< vector< vector<double> > >& pixel_probabilities,
-    vector<double>& priors, vector<double>& test_labels);
+  void IterateThroughImages(ifstream& test_images_stream,
+      vector<double> posterior_probabilities,
+      vector< vector< vector<double> > >& pixel_probabilities,
+      vector<double>& priors, vector<double>& test_labels);
 
 }  // namespace bayes
 

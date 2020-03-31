@@ -4,13 +4,11 @@
 #include <bayes/image.h>
 
 namespace bayes {
-
   double count = 0;
   double num_correct = 0;
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
       vector< vector< vector<double> > >& pixel_probabilities,
       vector<double> priors) {
-
 
     std::ifstream model_data("data/model_probabilities.csv");
     std::istream& input_stream = model_data;
@@ -19,26 +17,23 @@ namespace bayes {
     vector<double> test_labels;
     test_labels = AddLabelsToAVector(test_labels_stream);
 
-
-    string image_line;
-
-    // will be used to store posterior probabilities for each class for a single image
+    // will be used to store posterior probabilities for each
+    // class for a single image
     vector<double> posterior_probabilities(kNumDigits, 0);
 
-    IterateThroughImages(test_images_stream, posterior_probabilities, pixel_probabilities,
-        priors, test_labels);
+    IterateThroughImages(test_images_stream, posterior_probabilities,
+        pixel_probabilities, priors, test_labels);
 
     double percentage = (num_correct / count);
-    cout << percentage << endl;
-
+    cout << percentage * 100;
+    cout << "% of the images were correctly classified!" << endl;
   }
-
 
   void IterateThroughImages(ifstream& test_images_stream,
       vector<double> posterior_probabilities,
       vector< vector< vector<double> > >& pixel_probabilities,
       vector<double>& priors, vector<double>& test_labels) {
-    
+
     string image_line;
     int row = 0;
 
@@ -46,11 +41,14 @@ namespace bayes {
     while (std::getline(test_images_stream, image_line)) {
       cout << image_line << endl;
       for (size_t col = 0; col < kImageSize; col++) {
-
         for (size_t digit = 0; digit < kNumDigits; digit++) {
+          // The if statement below adds the priors to the posterior
+          // probabilities, but only once per image. Row and Col being 0
+          // was arbitrarily chosen
           if (row == 0 && col == 0) {
             posterior_probabilities[digit] += log10(priors[digit]);
           }
+
           // getting each character (column) in the row (line)
           if (image_line[col] == '+' || image_line[col] == '#') {
             // If it's shaded, get the probability at that pixel for
@@ -60,7 +58,8 @@ namespace bayes {
           } else {
             // if the space is empty, check for the probability
             // of the pixel not being shaded in the model
-            posterior_probabilities[digit] += log10(1 - pixel_probabilities[row][col][digit]);
+            posterior_probabilities[digit] +=
+                log10(1 - pixel_probabilities[row][col][digit]);
           }
         }
       }
@@ -68,18 +67,20 @@ namespace bayes {
       row++;
 
       // If I have reached the end of an image, then reset
-      // the posterior probabilities (should be 10 for each image)
+      // the posterior probabilities (should be 10 of them per image)
       if (row == 28) {
         ClassifyAnImage(posterior_probabilities, test_labels);
         row = 0;
         // count keeps track of what image we are on in the test images
         count++;
-        std::fill(posterior_probabilities.begin(), posterior_probabilities.end(), 0);
+        std::fill(posterior_probabilities.begin(),
+            posterior_probabilities.end(), 0);
       }
     }
   }
 
-  void ClassifyAnImage(vector<double>& posterior_probabilities, vector<double>& test_labels) {
+  void ClassifyAnImage(vector<double>& posterior_probabilities,
+      vector<double>& test_labels) {
     double classified = 0;
     for (size_t i = 0; i < kNumDigits; i++) {
       if (posterior_probabilities[i] > posterior_probabilities[classified]) {
@@ -106,7 +107,6 @@ namespace bayes {
     }
     return test_labels;
   }
-
 
 }  // namespace bayes
 
