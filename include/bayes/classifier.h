@@ -17,8 +17,7 @@ namespace bayes {
   const int kNumDigits = 10;
   const int kImageSize = 28;
 
-  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
-                     vector<double> priors);
+  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream);
   /**
    *
    * @param posterior_probabilities

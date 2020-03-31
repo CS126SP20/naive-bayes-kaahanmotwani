@@ -6,14 +6,13 @@
 namespace bayes {
   double count = 0;
   double num_correct = 0;
-  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
-      vector<double> priors) {
+  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream) {
 
     std::ifstream model_data("data/model_probabilities");
     std::istream& input_stream = model_data;
     //std::string line;
 
-    vector<double> priors2(kNumDigits, 0);
+    vector<double> priors(kNumDigits, 0);
     vector< vector< vector<double>>> image_probabilities(kImageSize,
         vector<vector<double>>(kImageSize,
             vector<double>(kNumDigits,0)));
@@ -28,8 +27,8 @@ namespace bayes {
     for (size_t i = 0; i < kNumDigits; i++) {
       double d;
       input_stream >> d;
-      priors2[i] = d;
-      cout << priors2[i] << endl;
+      priors[i] = d;
+      cout << priors[i] << endl;
     }
 
 

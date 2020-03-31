@@ -26,7 +26,7 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   std::ifstream test_images_stream("data/testimages");
   std::ifstream test_labels_stream("data/testlabels");
 
-  bayes::ReadModelData(test_images_stream, test_labels_stream, priors);
+  bayes::ReadModelData(test_images_stream, test_labels_stream);
 
 }
 
