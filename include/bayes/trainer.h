@@ -20,14 +20,39 @@ using std::endl;
 using std::vector;
 
 class Trainer {
- public:
-   static void parse_stream(ifstream& training_images_stream,
+  public:
+    static void parse_stream(ifstream& training_images_stream,
         ifstream& training_labels_stream);
 
+
   private:
-   static void PixelProbability(const int& digit, ifstream& training_images_stream);
-   static double CalculatePriors(ifstream& training_labels_stream, int index);
-   static void CalculateProbabilities(int count_of_shaded_pixels[28][28][10], int priors[10]);
+
+    /**
+    *
+    * @param pixel_probabilities
+    * @param occurrences
+     */
+    static void AddProbabilitiesToFile(vector< vector< vector<double> > >&
+        pixel_probabilities, vector<int>& occurrences);
+
+    static double CalculatePriors(ifstream& training_labels_stream, int index);
+
+    /**
+    *
+    * @param training_images_stream
+    * @param training_labels_stream
+    * @param pixel_probabilities
+    * @param occurrences
+     */
+    static void CalculateProbabilities(ifstream& training_images_stream,
+                                      ifstream& training_labels_stream,
+                                      vector< vector< vector<double> > >&
+                                          pixel_probabilities,
+                                      vector<int>& occurrences);
+    static constexpr int kNumDigits = 10;
+    static constexpr int kImageSize = 28;
+    static constexpr double k = 1;
+    static constexpr double v = 2;
 };
 
 #endif  // NAIVEBAYES_TRAINER_H
