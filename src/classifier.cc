@@ -7,16 +7,24 @@ namespace bayes {
   double count = 0;
   double num_correct = 0;
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
-      vector< vector< vector<double> > >& pixel_probabilities,
       vector<double> priors) {
 
     std::ifstream model_data("data/model_probabilities.csv");
     std::istream& input_stream = model_data;
-    std::string line;
+    //std::string line;
 
-//    double d;
-//    input_stream >> d;
-//    input_stream >> d;
+    vector< vector< vector<double>>>
+        csv_probabilities(kImageSize,vector<vector<double>>(kImageSize,vector<double>(kNumDigits,0)));
+    for (size_t i = 0; i < kNumDigits; i++) {
+      for (size_t row = 0; row < kImageSize; row++) {
+        for (size_t col = 0; col < kImageSize; col++) {
+          input_stream >> csv_probabilities[row][col][i];
+        }
+      }
+    }
+
+    cout << csv_probabilities[8][1][1] << endl;
+    //cout << pixel_probabilities[8][1][1] << endl;
 
     vector<double> test_labels;
     test_labels = AddLabelsToAVector(test_labels_stream);
@@ -26,7 +34,7 @@ namespace bayes {
     vector<double> posterior_probabilities(kNumDigits, 0);
 
     IterateThroughImages(test_images_stream, posterior_probabilities,
-        pixel_probabilities, priors, test_labels);
+        csv_probabilities, priors, test_labels);
 
     double percentage = (num_correct / count);
     cout << percentage * 100;
@@ -35,7 +43,7 @@ namespace bayes {
 
   void IterateThroughImages(ifstream& test_images_stream,
       vector<double> posterior_probabilities,
-      vector< vector< vector<double> > >& pixel_probabilities,
+      vector< vector< vector<double>>>& csv_probabilities,
       vector<double>& priors, vector<double>& test_labels) {
 
     string image_line;
@@ -58,12 +66,12 @@ namespace bayes {
             // If it's shaded, get the probability at that pixel for
             // each class, and then take the log of it
             posterior_probabilities[digit] +=
-                log10(pixel_probabilities[row][col][digit]);
+                log10(csv_probabilities[row][col][digit]);
           } else {
             // if the space is empty, check for the probability
             // of the pixel not being shaded in the model
             posterior_probabilities[digit] +=
-                log10(1 - pixel_probabilities[row][col][digit]);
+                log10(1 - csv_probabilities[row][col][digit]);
           }
         }
       }

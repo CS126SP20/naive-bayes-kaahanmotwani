@@ -9,7 +9,7 @@
 void Trainer::parse_stream(ifstream& training_images_stream,
                            ifstream& training_labels_stream) {
 
-  vector<vector<vector<double>>> pixel_probabilities(kImageSize,
+  vector< vector< vector<double>>> pixel_probabilities(kImageSize,
       vector<vector<double>>(kImageSize,vector<double>(kNumDigits,0)));
 
   // populates vector with 0s
@@ -25,8 +25,7 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   std::ifstream test_images_stream("data/testimages");
   std::ifstream test_labels_stream("data/testlabels");
 
-  bayes::ReadModelData(test_images_stream, test_labels_stream,
-      pixel_probabilities, priors);
+  bayes::ReadModelData(test_images_stream, test_labels_stream, priors);
 
 }
 

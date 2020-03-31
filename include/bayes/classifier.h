@@ -18,7 +18,6 @@ namespace bayes {
   const int kImageSize = 28;
 
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
-                     vector< vector< vector<double> > >& pixel_probabilities,
                      vector<double> priors);
   /**
    *
@@ -38,7 +37,7 @@ namespace bayes {
 
   void IterateThroughImages(ifstream& test_images_stream,
       vector<double> posterior_probabilities,
-      vector< vector< vector<double> > >& pixel_probabilities,
+      vector< vector< vector<double>>>& csv_probabilities,
       vector<double>& priors, vector<double>& test_labels);
 
 }  // namespace bayes
