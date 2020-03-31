@@ -19,8 +19,8 @@ void Trainer::parse_stream(ifstream& training_images_stream,
 
 
 
-  const int k = 1;
-  const int v = 2;
+  const double k = 1;
+  const double v = 2;
 
 
 
@@ -57,25 +57,45 @@ void Trainer::parse_stream(ifstream& training_images_stream,
 
   double priors[kNumDigits];
 
-
+  // This correctly calculates the priors (logarithmic base 10)
   for (size_t i = 0; i < kNumDigits; i++) {
-    priors[i] = (occurrences[i] / 5000.0);
+    priors[i] = log10(occurrences[i] / 5000.0);
   }
-  cout << priors[2] << endl;
 
   //CalculateProbabilities(count_of_shaded_pixels, priors);
+  // the below line correctly prints the number of pixels that are shaded
+  //cout << count_of_shaded_pixels[16][8][2] << endl;
 
-  cout << count_of_shaded_pixels[16][8][2] << endl;
 
   for (size_t x = 0; x < kImageSize; x++) {
     for (size_t y = 0; y < kImageSize; y++) {
       for (size_t i = 0; i < kNumDigits; i++) {
-        count_of_shaded_pixels[x][y][i] = count_of_shaded_pixels[x][y][i] / occurrences[i];
+        // Laplace smoothing used here
+        // This represents the probabilities of each pixel being shaded for a given class (digit)
+        count_of_shaded_pixels[x][y][i] = (k + count_of_shaded_pixels[x][y][i]) / ((k * v) + occurrences[i]);
       }
     }
   }
 
-  cout << count_of_shaded_pixels[16][8][2] << endl;
+  // correctly prints out Laplace smoothed probability
+  // cout << count_of_shaded_pixels[16][8][2] << endl;
+
+  double probabilities[kNumDigits];
+
+  // This set of nested for loops correctly calculates
+  for (size_t i = 0; i < kNumDigits; i++) {
+    probabilities[i] = 1;
+    for (size_t x = 0; x < kImageSize; x++) {
+      for (size_t y = 0; y < kImageSize; y++) {
+        probabilities[i] += log10(count_of_shaded_pixels[x][y][i]);
+      }
+    }
+    probabilities[i] += priors[i];
+  }
+
+  //cout << count_of_shaded_pixels[1][0][2] << endl;
+
+  cout << probabilities[0] << endl;
 
 }
 
