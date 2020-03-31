@@ -17,14 +17,15 @@ namespace bayes {
 
 
     // will be used to store posterior probabilities for each class for a single image
-    vector<double> posterior_probabilities(kNumDigits, 1);
+    vector<double> posterior_probabilities(kNumDigits, 0);
 
 
 
     int row = 0;
 
+
     // getting each line in the image that has 28 rows (lines)
-    while (row < kImageSize && std::getline(test_images_stream, image_line)) {
+    while (std::getline(test_images_stream, image_line)) {
       cout << image_line << endl;
 
       for (size_t col = 0; col < kImageSize; col++) {
@@ -41,18 +42,25 @@ namespace bayes {
             posterior_probabilities[digit] += log10(1 - pixel_probabilities[row][col][digit]);
             // if the space is empty, check for the inverse
           }
+
+
         }
       }
       // to move on to the next line in the image
       row++;
 
-      if (row == 27) {
+
+      if (row == 28) {
+
+//        for (size_t i = 0; i < kNumDigits; i++) {
+//          posterior_probabilities[i] += log10(priors[i]);
+//        }
         classify(posterior_probabilities);
+        //count++;
+        row = 0;
+        std::fill(posterior_probabilities.begin(), posterior_probabilities.end(), 0);
       }
     }
-
-
-
 
 
   }
@@ -68,6 +76,8 @@ namespace bayes {
 
     classified_images.push_back(classified);
     cout << classified_images[0] << endl;
+
+
 
   }
 }  // namespace bayes
