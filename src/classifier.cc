@@ -25,7 +25,7 @@ namespace bayes {
     // will be used to store posterior probabilities for each class for a single image
     vector<double> posterior_probabilities(kNumDigits, 0);
 
-    classify(test_images_stream, posterior_probabilities, pixel_probabilities,
+    IterateThroughImages(test_images_stream, posterior_probabilities, pixel_probabilities,
         priors, test_labels);
 
     double percentage = (num_correct / count);
@@ -34,9 +34,11 @@ namespace bayes {
   }
 
 
-  void classify(ifstream& test_images_stream, vector<double> posterior_probabilities,
-                vector< vector< vector<double> > >& pixel_probabilities,
-                vector<double> priors, vector<double> test_labels) {
+  void IterateThroughImages(ifstream& test_images_stream,
+      vector<double> posterior_probabilities,
+      vector< vector< vector<double> > >& pixel_probabilities,
+      vector<double>& priors, vector<double>& test_labels) {
+    
     string image_line;
     int row = 0;
 
@@ -48,29 +50,26 @@ namespace bayes {
         for (size_t digit = 0; digit < kNumDigits; digit++) {
           if (row == 0 && col == 0) {
             posterior_probabilities[digit] += log10(priors[digit]);
-
           }
           // getting each character (column) in the row (line)
           if (image_line[col] == '+' || image_line[col] == '#') {
-            posterior_probabilities[digit] += log10(pixel_probabilities[row][col][digit]);
-            // If it's shaded, get the probability at that pixel for each class, and then take the log of it
-            // count_of_shaded_pixels[row][col][digit]++;
-
+            // If it's shaded, get the probability at that pixel for
+            // each class, and then take the log of it
+            posterior_probabilities[digit] +=
+                log10(pixel_probabilities[row][col][digit]);
           } else {
+            // if the space is empty, check for the probability
+            // of the pixel not being shaded in the model
             posterior_probabilities[digit] += log10(1 - pixel_probabilities[row][col][digit]);
-            // if the space is empty, check for the inverse
           }
-
-
         }
       }
       // to move on to the next line in the image
       row++;
 
-      // If I have reached the end of an image, then reset posterior probabilities (should be 10 for each image)
+      // If I have reached the end of an image, then reset
+      // the posterior probabilities (should be 10 for each image)
       if (row == 28) {
-
-
         ClassifyAnImage(posterior_probabilities, test_labels);
         row = 0;
         // count keeps track of what image we are on in the test images
