@@ -55,12 +55,7 @@ void Trainer::parse_stream(ifstream& training_images_stream,
     }
   }
 
-  double priors[kNumDigits];
 
-  // This correctly calculates the priors (logarithmic base 10)
-  for (size_t i = 0; i < kNumDigits; i++) {
-    priors[i] = log10(occurrences[i] / 5000.0);
-  }
 
   //CalculateProbabilities(count_of_shaded_pixels, priors);
   // the below line correctly prints the number of pixels that are shaded
@@ -79,6 +74,17 @@ void Trainer::parse_stream(ifstream& training_images_stream,
       }
       file << endl;
     }
+
+  }
+
+
+  vector<double> priors;
+
+  // This correctly calculates the priors (logarithmic base 10)
+  for (size_t i = 0; i < kNumDigits; i++) {
+    priors.push_back(occurrences[i] / 5000.0);
+    file << priors[i];
+    file << ", ";
   }
 
   file.close();
