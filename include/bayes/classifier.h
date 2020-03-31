@@ -28,11 +28,17 @@ namespace bayes {
 
   /**
    *
-   * @param posterior_probabilities
-   * @param test_labels
+   * @param input_stream
+   * @return
    */
-  void ClassifyAnImage(vector<double>& posterior_probabilities,
-      const vector<double>& test_labels);
+  vector< vector< vector<double>>> ReadModelData(istream& input_stream);
+
+  /**
+   *
+   * @param input_stream
+   * @return
+   */
+  vector<double> ReadPriorsFromModel(istream& input_stream);
 
   /**
    *
@@ -54,17 +60,12 @@ namespace bayes {
 
   /**
    *
-   * @param input_stream
-   * @return
+   * @param posterior_probabilities
+   * @param test_labels
    */
-  vector< vector< vector<double>>> ReadModelData(istream& input_stream);
+  void ClassifyAnImage(vector<double>& posterior_probabilities,
+                       const vector<double>& test_labels);
 
-  /**
-   *
-   * @param input_stream
-   * @return
-   */
-  vector<double> ReadPriorsFromModel(istream& input_stream);
 }  // namespace bayes
 
 #endif  // BAYES_CLASSIFIER_H_

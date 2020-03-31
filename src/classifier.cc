@@ -30,11 +30,12 @@ namespace bayes {
   }
 
   vector< vector< vector<double>>> ReadModelData(istream& input_stream) {
-    //
+    // A vector that reads in all the image pixel probabilities from the model
     vector< vector< vector<double>>> image_probabilities(kImageSize,
         vector<vector<double>>(kImageSize,
             vector<double>(kNumDigits,0)));
-    //
+    // These nested loops iterate through all possible indexes of image
+    // probabilities and add the input stream from the model to the vector
     for (size_t i = 0; i < kNumDigits; i++) {
       for (size_t row = 0; row < kImageSize; row++) {
         for (size_t col = 0; col < kImageSize; col++) {
@@ -48,14 +49,28 @@ namespace bayes {
 
   vector<double> ReadPriorsFromModel(istream& input_stream) {
     vector<double> priors(kNumDigits, 0);
-    // C
+    // Calculates the priors by taking the input stream, which at this point
+    // only has the last line left, which are the priors
     for (size_t i = 0; i < kNumDigits; i++) {
-      double d;
-      input_stream >> d;
-      priors[i] = d;
+      double prior;
+      input_stream >> prior;
+      priors[i] = prior;
     }
 
     return priors;
+  }
+
+  vector<double> AddLabelsToAVector(ifstream& test_labels_stream) {
+    string label_line;
+    double value;
+    vector<double> test_labels;
+    // This while loop adds the correct test labels into a vector
+    while (std::getline(test_labels_stream, label_line)) {
+      value = std::stoi(label_line);
+      test_labels.push_back(value);
+    }
+
+    return test_labels;
   }
 
   void IterateThroughImages(ifstream& test_images_stream,
@@ -70,7 +85,6 @@ namespace bayes {
 
     // getting each line in the image that has 28 rows (lines)
     while (std::getline(test_images_stream, image_line)) {
-      cout << image_line << endl;
 
       for (size_t col = 0; col < kImageSize; col++) {
         for (size_t digit = 0; digit < kNumDigits; digit++) {
@@ -113,32 +127,21 @@ namespace bayes {
 
   void ClassifyAnImage(vector<double>& posterior_probabilities,
       const vector<double>& test_labels) {
-    double classified = 0;
+
+    double model_prediction = 0;
+    // This classifies an image based on which digit had the highest
+    // posterior probability
     for (size_t i = 0; i < kNumDigits; i++) {
-      if (posterior_probabilities[i] > posterior_probabilities[classified]) {
-        classified = i;
+      if (posterior_probabilities[i] > posterior_probabilities[model_prediction]) {
+        model_prediction = i;
       }
     }
 
-    cout << classified << endl;
-
-    if (classified == test_labels[count]) {
+    // If the model's predicition matches the correct label, increment the
+    // number of correct images guessed
+    if (model_prediction == test_labels[count]) {
       num_correct++;
-      cout << "correct" << endl;
     }
   }
-
-  vector<double> AddLabelsToAVector(ifstream& test_labels_stream) {
-    string label_line;
-    double value;
-    vector<double> test_labels;
-    while (std::getline(test_labels_stream, label_line)) {
-      value = std::stoi(label_line);
-      test_labels.push_back(value);
-    }
-
-    return test_labels;
-  }
-
 }  // namespace bayes
 
