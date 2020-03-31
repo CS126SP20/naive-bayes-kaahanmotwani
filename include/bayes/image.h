@@ -17,11 +17,11 @@ namespace bayes {
  * You can delete this comment once you're done with it.
  */
 
-constexpr size_t kImageSize = 28;
+//constexpr size_t kImageSize = 28;
 
 class Image {
  private:
-  char pixels_[kImageSize][kImageSize];
+  //char pixels_[kImageSize][kImageSize];
 };
 
 }  // namespace bayes

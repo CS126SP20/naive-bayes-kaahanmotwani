@@ -48,7 +48,7 @@ class Model {
   // probs[0][0][0][1] is the computed probability that a pixel at
   // [0][0] for class 0 is shaded.
  private:
-  double probs_[kImageSize][kImageSize][kNumClasses][kNumShades];
+  //double probs_[kImageSize][kImageSize][kNumClasses][kNumShades];
 };
 
 }  // namespace bayes

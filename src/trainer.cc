@@ -9,13 +9,17 @@
 void Trainer::parse_stream(ifstream& training_images_stream,
                            ifstream& training_labels_stream) {
   const int kNumDigits = 10;
-  vector<vector<vector<double>>> pixel_probabilities;
+  const int kImageSize = 28;
+  vector<vector<vector<double>>> pixel_probabilities(28,vector<vector<double> >(28,vector <double>(10,0)));
 
-  // populates array with 0
-  int occurrences[kNumDigits];
-  for (int& occurrence : occurrences) {
-    occurrence = 0;
-  }
+
+  // populates vector with 0
+  vector<int> occurrences(kNumDigits, 0);
+
+//  int occurrences[kNumDigits];
+//  for (int& occurrence : occurrences) {
+//    occurrence = 0;
+//  }
 
 
   const double k = 1;
@@ -25,7 +29,7 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   string label_line;
   string image_line;
 
-  const int kImageSize = 28;
+
 
   double count_of_shaded_pixels[kImageSize][kImageSize][kNumDigits] = {{{0}}};
 
@@ -46,7 +50,8 @@ void Trainer::parse_stream(ifstream& training_images_stream,
       for (size_t col = 0; col < kImageSize; col++) {
         // getting each character (column) in the row (line)
         if (image_line[col] == '+' || image_line[col] == '#') {
-          count_of_shaded_pixels[row][col][digit]++;
+          pixel_probabilities[row][col][digit]++;
+          //count_of_shaded_pixels[row][col][digit]++;
 
         }
       }
@@ -59,7 +64,8 @@ void Trainer::parse_stream(ifstream& training_images_stream,
 
   //CalculateProbabilities(count_of_shaded_pixels, priors);
   // the below line correctly prints the number of pixels that are shaded
-  cout << count_of_shaded_pixels[18][9][2] << endl;
+  //cout << count_of_shaded_pixels[18][9][2] << endl;
+  cout << pixel_probabilities[18][9][2] << endl;
 
   std::ofstream file("data/model_probabilities.csv");
 
@@ -67,9 +73,12 @@ void Trainer::parse_stream(ifstream& training_images_stream,
     for (size_t row = 0; row < kImageSize; row++) {
       for (size_t col = 0; col < kImageSize; col++) {
         // Laplace smoothing used here
-        // This represents the probabilities of each pixel being shaded for a given class (digit)
-        count_of_shaded_pixels[row][col][i] = (k + count_of_shaded_pixels[row][col][i]) / ((v * k) + occurrences[i]);
-        file << count_of_shaded_pixels[row][col][i];
+        // This represents the smoothed probabilities of each pixel being shaded for a given class (digit)
+        //count_of_shaded_pixels[row][col][i] = (k + count_of_shaded_pixels[row][col][i]) / ((v * k) + occurrences[i]);
+
+        pixel_probabilities[row][col][i] = (k + pixel_probabilities[row][col][i]) / ((v * k) + occurrences[i]);
+        //file << count_of_shaded_pixels[row][col][i];
+        file << pixel_probabilities[row][col][i];
         file << ", ";
       }
       file << endl;
@@ -92,7 +101,10 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   // correctly prints out Laplace smoothed probability
   //cout << count_of_shaded_pixels[18][9][2] << endl;
 
-  bayes::ReadModelData();
+  std::ifstream test_images_stream("data/testimages");
+  std::ifstream test_labels_stream("data/testlabels");
+
+  bayes::ReadModelData(test_images_stream, test_labels_stream);
 
 
   // cout << probabilities[0] << endl;

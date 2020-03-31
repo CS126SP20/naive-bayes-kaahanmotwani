@@ -7,10 +7,13 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 
+using std::ifstream;
+using std::string;
+
 namespace bayes {
   const int kNumDigits = 10;
   const int kImageSize = 28;
-  void ReadModelData();
+  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream);
 }  // namespace bayes
 
 #endif  // BAYES_CLASSIFIER_H_
