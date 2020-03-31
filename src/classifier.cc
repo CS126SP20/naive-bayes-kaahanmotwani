@@ -14,6 +14,10 @@ namespace bayes {
     std::istream& input_stream = model_data;
     std::string line;
 
+//    double d;
+//    input_stream >> d;
+//    input_stream >> d;
+
     vector<double> test_labels;
     test_labels = AddLabelsToAVector(test_labels_stream);
 

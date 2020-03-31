@@ -76,7 +76,7 @@ void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
             (k + pixel_probabilities[row][col][i]) / ((v * k) + occurrences[i]);
 
         file << pixel_probabilities[row][col][i];
-        file << ", ";
+        file << " ";
       }
       file << endl;
     }
@@ -89,7 +89,7 @@ void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
   for (size_t i = 0; i < kNumDigits; i++) {
     priors.push_back(occurrences[i] / 5000.0);
     file << priors[i];
-    file << ", ";
+    file << " ";
   }
 
   file.close();
