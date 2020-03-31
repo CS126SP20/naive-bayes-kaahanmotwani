@@ -150,4 +150,4 @@ data/testimages
 data/testlabels
 data/trainingimages
 data/traininglabels
-data/model_probabilities.csv
+data/model_probabilities

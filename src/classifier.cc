@@ -9,21 +9,22 @@ namespace bayes {
   void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
       vector<double> priors) {
 
-    std::ifstream model_data("data/model_probabilities.csv");
+    std::ifstream model_data("data/model_probabilities");
     std::istream& input_stream = model_data;
     //std::string line;
 
-    vector< vector< vector<double>>>
-        csv_probabilities(kImageSize,vector<vector<double>>(kImageSize,vector<double>(kNumDigits,0)));
+    vector< vector< vector<double>>> image_probabilities(kImageSize,
+        vector<vector<double>>(kImageSize,
+            vector<double>(kNumDigits,0)));
     for (size_t i = 0; i < kNumDigits; i++) {
       for (size_t row = 0; row < kImageSize; row++) {
         for (size_t col = 0; col < kImageSize; col++) {
-          input_stream >> csv_probabilities[row][col][i];
+          input_stream >> image_probabilities[row][col][i];
         }
       }
     }
 
-    cout << csv_probabilities[8][1][1] << endl;
+    cout << image_probabilities[8][1][1] << endl;
     //cout << pixel_probabilities[8][1][1] << endl;
 
     vector<double> test_labels;
@@ -34,7 +35,7 @@ namespace bayes {
     vector<double> posterior_probabilities(kNumDigits, 0);
 
     IterateThroughImages(test_images_stream, posterior_probabilities,
-        csv_probabilities, priors, test_labels);
+        image_probabilities, priors, test_labels);
 
     double percentage = (num_correct / count);
     cout << percentage * 100;

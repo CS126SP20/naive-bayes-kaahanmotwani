@@ -10,7 +10,8 @@ void Trainer::parse_stream(ifstream& training_images_stream,
                            ifstream& training_labels_stream) {
 
   vector< vector< vector<double>>> pixel_probabilities(kImageSize,
-      vector<vector<double>>(kImageSize,vector<double>(kNumDigits,0)));
+      vector<vector<double>>(kImageSize,
+          vector<double>(kNumDigits,0)));
 
   // populates vector with 0s
   vector<int> occurrences(kNumDigits, 0);
@@ -48,7 +49,6 @@ void Trainer::CalculateProbabilities(ifstream& training_images_stream,
     while (row < kImageSize && std::getline(training_images_stream,
                                             image_line)) {
       for (size_t col = 0; col < kImageSize; col++) {
-
         // getting each character (column) in the row (line)
         if (image_line[col] == '+' || image_line[col] == '#') {
           pixel_probabilities[row][col][digit]++;
@@ -64,7 +64,7 @@ void Trainer::CalculateProbabilities(ifstream& training_images_stream,
 void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
     pixel_probabilities, vector<int>& occurrences, vector<double>& priors) {
 
-  std::ofstream file("data/model_probabilities.csv");
+  std::ofstream file("data/model_probabilities");
 
   for (size_t i = 0; i < kNumDigits; i++) {
     for (size_t row = 0; row < kImageSize; row++) {
