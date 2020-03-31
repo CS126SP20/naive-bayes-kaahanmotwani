@@ -21,6 +21,11 @@ using std::vector;
 
 class Trainer {
   public:
+    /**
+     *
+     * @param training_images_stream
+     * @param training_labels_stream
+     */
     static void parse_stream(ifstream& training_images_stream,
         ifstream& training_labels_stream);
 
@@ -33,7 +38,7 @@ class Trainer {
     * @param occurrences
      */
     static void AddProbabilitiesToFile(vector< vector< vector<double> > >&
-        pixel_probabilities, vector<int>& occurrences);
+        pixel_probabilities, vector<int>& occurrences, vector<double> priors);
 
     /**
     *

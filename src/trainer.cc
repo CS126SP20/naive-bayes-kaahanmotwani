@@ -14,22 +14,56 @@ void Trainer::parse_stream(ifstream& training_images_stream,
 
   // populates vector with 0s
   vector<int> occurrences(kNumDigits, 0);
+  vector<double> priors;
 
   CalculateProbabilities(training_images_stream, training_labels_stream,
       pixel_probabilities, occurrences);
 
-  AddProbabilitiesToFile(pixel_probabilities, occurrences);
+  AddProbabilitiesToFile(pixel_probabilities, occurrences, priors);
 
 
   std::ifstream test_images_stream("data/testimages");
   std::ifstream test_labels_stream("data/testlabels");
 
-  bayes::ReadModelData(test_images_stream, test_labels_stream);
+  bayes::ReadModelData(test_images_stream, test_labels_stream,
+      pixel_probabilities, priors);
+
+}
+
+void Trainer::CalculateProbabilities(ifstream& training_images_stream,
+                                     ifstream& training_labels_stream,
+                                     vector< vector< vector<double> > >&
+                                     pixel_probabilities,
+                                     vector<int>& occurrences) {
+  string label_line;
+  string image_line;
+  int digit;
+
+  while (std::getline(training_labels_stream, label_line)) {
+    digit = std::stoi(label_line);
+    // Populates occurrences with how many times digits occur in training labels
+    occurrences[digit]++;
+
+    int row = 0;
+    // getting each line in the image that has 28 rows (lines)
+    while (row < kImageSize && std::getline(training_images_stream,
+                                            image_line)) {
+      for (size_t col = 0; col < kImageSize; col++) {
+
+        // getting each character (column) in the row (line)
+        if (image_line[col] == '+' || image_line[col] == '#') {
+          pixel_probabilities[row][col][digit]++;
+        }
+      }
+      // to move on to the next line in the image
+      row++;
+    }
+  }
 
 }
 
 void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
-    pixel_probabilities, vector<int>& occurrences) {
+    pixel_probabilities, vector<int>& occurrences, vector<double> priors) {
 
   std::ofstream file("data/model_probabilities.csv");
 
@@ -49,7 +83,7 @@ void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
     file << endl;
   }
 
-  vector<double> priors;
+  // vector<double> priors;
 
   //This correctly calculates the prior probabilities and adds them to the csv
   for (size_t i = 0; i < kNumDigits; i++) {
@@ -62,34 +96,5 @@ void Trainer::AddProbabilitiesToFile(vector< vector< vector<double> > >&
 
 }
 
-void Trainer::CalculateProbabilities(ifstream& training_images_stream,
-                                     ifstream& training_labels_stream,
-                                     vector< vector< vector<double> > >&
-                                         pixel_probabilities,
-                                     vector<int>& occurrences) {
-  string label_line;
-  string image_line;
-  int digit;
 
-  while (std::getline(training_labels_stream, label_line)) {
-    digit = std::stoi(label_line);
-    // Populates occurrences with how many times digits occur in training labels
-    occurrences[digit]++;
-
-    int row = 0;
-    // getting each line in the image that has 28 rows (lines)
-    while (row < kImageSize && std::getline(training_images_stream, image_line)) {
-      for (size_t col = 0; col < kImageSize; col++) {
-
-        // getting each character (column) in the row (line)
-        if (image_line[col] == '+' || image_line[col] == '#') {
-          pixel_probabilities[row][col][digit]++;
-        }
-      }
-      // to move on to the next line in the image
-      row++;
-    }
-  }
-
-}
 

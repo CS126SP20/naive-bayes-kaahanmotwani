@@ -9,11 +9,15 @@
 
 using std::ifstream;
 using std::string;
+using std::vector;
+using std::cout;
+using std::endl;
 
 namespace bayes {
   const int kNumDigits = 10;
   const int kImageSize = 28;
-  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream);
+  void ReadModelData(ifstream& test_images_stream, ifstream& test_labels_stream,
+                     vector< vector< vector<double> > >& pixel_probabilities, vector<double> priors);
 }  // namespace bayes
 
 #endif  // BAYES_CLASSIFIER_H_
