@@ -22,16 +22,20 @@ namespace bayes {
    *
    * @param test_images_stream
    * @param test_labels_stream
+   * @return
    */
-  void ValidateClassification(ifstream& test_images_stream,
+  double ValidateClassificationAndReturnAccuracy(ifstream& test_images_stream,
       ifstream& test_labels_stream);
 
   /**
    *
    * @param input_stream
+   * @param kImageSize
+   * @param kNumDigits
    * @return
    */
-  vector< vector< vector<double>>> ReadModelData(istream& input_stream);
+  vector< vector< vector<double>>> ReadModelData(istream& input_stream,
+      int kImageSize, int kNumDigits);
 
   /**
    *
@@ -62,8 +66,9 @@ namespace bayes {
    *
    * @param posterior_probabilities
    * @param test_labels
+   * @return
    */
-  void ClassifyAnImage(vector<double>& posterior_probabilities,
+  double ClassifyAnImage(vector<double>& posterior_probabilities,
                        const vector<double>& test_labels);
 
 }  // namespace bayes

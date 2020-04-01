@@ -14,10 +14,11 @@ using std::endl;
 using std::ifstream;
 
 int main(int argc, char** argv) {
-  // U
+
   gflags::SetUsageMessage(
       "Greets you with your name. Pass --helpshort for options.");
 
+  // Uses gFlags to parse command-line arguments into image & label streams
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   ifstream training_images_stream(FLAGS_images);
   ifstream training_labels_stream(FLAGS_labels);

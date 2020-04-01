@@ -7,15 +7,16 @@ namespace bayes {
   double count = 0;
   double num_correct = 0;
 
-  void ValidateClassification(ifstream& test_images_stream,
+  double ValidateClassificationAndReturnAccuracy(ifstream& test_images_stream,
       ifstream& test_labels_stream) {
+
     // Uses an ifstream to get model file, and then places it into an istream
     std::ifstream model_data("data/model_probabilities");
     std::istream& input_stream = model_data;
     // Gets the probabilities of each image and priors from the model using
     // helper functions
     vector< vector< vector<double>>> image_probabilities =
-        ReadModelData(input_stream);
+        ReadModelData(input_stream, kImageSize, kNumDigits);
     vector<double> priors = ReadPriorsFromModel(input_stream);
 
     vector<double> test_labels;
@@ -24,12 +25,15 @@ namespace bayes {
     IterateThroughImages(test_images_stream,
         image_probabilities, priors, test_labels);
 
+    // Prints the model's accuracy on the test images
     double percentage_correct = (num_correct / count);
     cout << percentage_correct * 100;
     cout << "% of the images were correctly classified!" << endl;
+    return percentage_correct;
   }
 
-  vector< vector< vector<double>>> ReadModelData(istream& input_stream) {
+  vector< vector< vector<double>>> ReadModelData(istream& input_stream,
+      int kImageSize, int kNumDigits) {
     // A vector that reads in all the image pixel probabilities from the model
     vector< vector< vector<double>>> image_probabilities(kImageSize,
         vector<vector<double>>(kImageSize,
@@ -67,6 +71,7 @@ namespace bayes {
     // This while loop adds the correct test labels into a vector
     while (std::getline(test_labels_stream, label_line)) {
       value = std::stoi(label_line);
+      cout << value << endl;
       test_labels.push_back(value);
     }
 
@@ -125,23 +130,26 @@ namespace bayes {
     }
   }
 
-  void ClassifyAnImage(vector<double>& posterior_probabilities,
+  double ClassifyAnImage(vector<double>& posterior_probabilities,
       const vector<double>& test_labels) {
 
     double model_prediction = 0;
     // This classifies an image based on which digit had the highest
     // posterior probability
     for (size_t i = 0; i < kNumDigits; i++) {
-      if (posterior_probabilities[i] > posterior_probabilities[model_prediction]) {
+      if (posterior_probabilities[i] >
+        posterior_probabilities[model_prediction]) {
         model_prediction = i;
       }
     }
 
-    // If the model's predicition matches the correct label, increment the
+    // If the model's prediction matches the correct label, increment the
     // number of correct images guessed
     if (model_prediction == test_labels[count]) {
       num_correct++;
     }
+
+    return model_prediction;
   }
 }  // namespace bayes
 
