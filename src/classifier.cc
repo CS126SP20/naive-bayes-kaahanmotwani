@@ -33,6 +33,7 @@ namespace bayes {
 
   vector< vector< vector<double>>> ReadModelData(istream& input_stream,
       int kImageSize, int kNumDigits) {
+    // kImageSize and kNumDigits are passed as parameters for testing purposes
     // A vector that reads in all the image pixel probabilities from the model
     vector< vector< vector<double>>> image_probabilities(kImageSize,
         vector<vector<double>>(kImageSize,
@@ -70,7 +71,6 @@ namespace bayes {
     // This while loop adds the correct test labels into a vector
     while (std::getline(test_labels_stream, label_line)) {
       value = std::stoi(label_line);
-      cout << value << endl;
       test_labels.push_back(value);
     }
 

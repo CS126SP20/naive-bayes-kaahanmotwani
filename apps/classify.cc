@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   ifstream training_images_stream(FLAGS_images);
   ifstream training_labels_stream(FLAGS_labels);
-  Trainer::parse_stream(training_images_stream, training_labels_stream);
+  Trainer::SetUp(training_images_stream, training_labels_stream);
 
   return EXIT_SUCCESS;
 }

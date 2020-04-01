@@ -4,7 +4,7 @@
 
 #include "bayes/trainer.h"
 
-void Trainer::parse_stream(ifstream& training_images_stream,
+void Trainer::SetUp(ifstream& training_images_stream,
                            ifstream& training_labels_stream) {
 
   vector< vector< vector<double>>> pixel_probabilities(kImageSize,
@@ -24,8 +24,8 @@ void Trainer::parse_stream(ifstream& training_images_stream,
   std::ifstream test_images_stream("data/testimages");
   std::ifstream test_labels_stream("data/testlabels");
 
-  double a = bayes::ValidateClassificationAndReturnAccuracy(test_images_stream,
-      test_labels_stream);
+  bayes::ValidateClassificationAndReturnAccuracy
+      (test_images_stream,test_labels_stream);
 
 }
 
