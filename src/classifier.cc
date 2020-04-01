@@ -1,7 +1,6 @@
 // Copyright 2020 Kaahan Motwani. All rights reserved.
 
 #include <bayes/classifier.h>
-#include <bayes/image.h>
 
 namespace bayes {
   double count = 0;
